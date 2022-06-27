@@ -8,8 +8,8 @@ my `API Framework <https://apiframework.readthedocs.io/en/latest/>`_ for making 
 
 Note
 ----
-    This is still *very much* a work in progress, I would really recommend not using this in
-    its current state. I will eventually release this as a PyPi package, I hope.
+This is still *very much* a work in progress, I would really recommend not using this in
+its current state. I will eventually release this as a PyPi package, I hope.
 
 
 Disclaimer
