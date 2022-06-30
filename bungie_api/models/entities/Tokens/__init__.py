@@ -1,12 +1,22 @@
 from .classes import (
-    PartnerOfferSkuHistoryResponse,
+    PartnerOfferClaimRequest,
     PartnerOfferHistoryResponse,
+    PartnerOfferSkuHistoryResponse,
+    CollectibleDefinitions,
+    RewardAvailabilityModel,
+    UserRewardAvailabilityModel,
+    RewardDisplayProperties,
     BungieRewardDisplay,
 )
 
 
 __all__ = [
-    'PartnerOfferSkuHistoryResponse',
+    'PartnerOfferClaimRequest',
     'PartnerOfferHistoryResponse',
+    'PartnerOfferSkuHistoryResponse',
+    'CollectibleDefinitions',
+    'RewardAvailabilityModel',
+    'UserRewardAvailabilityModel',
+    'RewardDisplayProperties',
     'BungieRewardDisplay',
 ]

@@ -6,6 +6,13 @@ from arya_api_framework.utils import apiclient, endpoint
 from ..decorators import destinyclient, oauth_required
 from ..models import responses, queries
 from ..models.entities.Applications import ApplicationScopes
+from ..models.entities.Tokens import (
+    PartnerOfferClaimRequest
+)
+
+__all__ = [
+    'Tokens'
+]
 
 
 @destinyclient
@@ -30,7 +37,7 @@ class Tokens(SubClient, name='tokens', relative_path='/Tokens'):
     ) -> responses.Tokens.ClaimPartnerOffer:
         return self.post(
             '/Partner/ClaimOffer/',
-            body=queries.Tokens.PartnerOfferClaimRequest(
+            body=PartnerOfferClaimRequest(
                 PartnerOfferId=partner_offer_id,
                 BungieNetMembershipId=bungie_net_membership_id,
                 TransactionId=transaction_id

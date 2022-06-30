@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from arya_api_framework import BaseModel
-from pydantic import Extra
+from pydantic import Field
 
 from ....utils import ValidatedDatetime
 from ..User import GeneralUser
@@ -9,6 +9,14 @@ from ..GroupsV2 import GroupResponse
 from ..Tags.Models.Contracts import TagResponse
 from ..Queries import PagedQuery
 from ..Ignores import IgnoreResponse
+from .enums import (
+    ForumMediaType,
+    ForumPostCategoryEnums,
+    ForumFlagsEnum,
+    ForumPostPopularity,
+    ForumRecruitmentIntensityLabel,
+    ForumRecruitmentToneLabel,
+)
 
 
 __all__ = [
@@ -26,7 +34,7 @@ class PostResponse(BaseModel):
     topicId: Optional[int]
     forumId: Optional[int]
     threadDepth: int
-    category: int
+    category: ForumPostCategoryEnums
     authorMembershipId: int
     editorMembershipId: Optional[int]
     subject: Optional[str]
@@ -44,7 +52,7 @@ class PostResponse(BaseModel):
     downvotes: int
     ratingScore: int
     isGroupPrivate: bool
-    flags: int
+    flags: ForumFlagsEnum
     lockedForReplies: bool
     parentAuthorId: int
     topicAuthorId: int
@@ -58,9 +66,9 @@ class PostResponse(BaseModel):
     archivedLastReplyDate: Optional[ValidatedDatetime]
     lastReplyId: Optional[int]
     IsPinned: bool
-    urlMediaType: int
+    urlMediaType: ForumMediaType
     thumbnail: Optional[str]
-    popularity: int
+    popularity: ForumPostPopularity
     isActive: bool
     isAnnouncement: bool
     userRating: int
@@ -90,8 +98,8 @@ class PollResponse(BaseModel):
 class ForumRecruitmentDetail(BaseModel):
     topicId: int
     microphoneRequired: bool
-    intensity: str
-    tone: str
+    intensity: ForumRecruitmentIntensityLabel = Field(type='str')
+    tone: ForumRecruitmentToneLabel = Field(type='str')
     approved: bool
     conversationId: Optional[int]
     playerSlotsTotal: int

@@ -7,6 +7,9 @@ from .classes import (
     DestinyStat,
     DestinyTalentNode,
     DestinyTalentNodeStatBlock,
+    DestinyUnlockStatus,
+    DestinyEquipItemResult,
+    DestinyEquipItemResults,
 )
 
 from .enums import (
@@ -45,9 +48,14 @@ from .enums import (
     DestinyActivityDifficultyTier,
     EquipFailureReason,
     TalentNodeState,
+    DestinyVendorFilter,
+    VendorItemStatus,
+    DestinyVendorItemState,
 )
 
 from . import (
+    Activities,
+    Advanced,
     Artifacts,
     Challenges,
     Character,
@@ -61,6 +69,8 @@ from . import (
     Perks,
     Progression,
     Quests,
+    Requests,
+    Reporting,
     Responses,
     Sockets,
     Vendors,
@@ -76,6 +86,9 @@ __all__ = [
     'DestinyStat',
     'DestinyTalentNode',
     'DestinyTalentNodeStatBlock',
+    'DestinyUnlockStatus',
+    'DestinyEquipItemResult',
+    'DestinyEquipItemResults',
 
     'DestinyScope',
     'DestinyPresentationNodeState',
@@ -112,7 +125,12 @@ __all__ = [
     'DestinyActivityDifficultyTier',
     'EquipFailureReason',
     'TalentNodeState',
+    'DestinyVendorFilter',
+    'VendorItemStatus',
+    'DestinyVendorItemState',
 
+    'Activities',
+    'Advanced',
     'Artifacts',
     'Challenges',
     'Character',
@@ -126,6 +144,8 @@ __all__ = [
     'Perks',
     'Progression',
     'Quests',
+    'Requests',
+    'Reporting',
     'Responses',
     'Sockets',
     'Vendors',

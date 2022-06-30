@@ -3,6 +3,11 @@ from ....framework import DocumentedIntEnum
 
 __all__ = [
     'DestinyActivityModeType',
+    'PeriodType',
+    'DestinyStatsCategoryType',
+    'UnitType',
+    'DestinyStatsMergeMethod',
+    'DestinyStatsGroupType',
 ]
 
 
@@ -90,3 +95,68 @@ class DestinyActivityModeType(DocumentedIntEnum):
     Rift = 88
     ZoneControl = 89
     IronBannerRift = 90
+
+
+class PeriodType(DocumentedIntEnum):
+    None_ = 0
+    Daily = 1
+    AllTime = 2
+    Activity = 3
+
+
+class DestinyStatsCategoryType(DocumentedIntEnum):
+    None_ = 0
+    Kills = 1
+    Assists = 2
+    Deaths = 3
+    Criticals = 4
+    KDa = 5
+    KD = 6
+    Score = 7
+    Entered = 8
+    TimePlayed = 9
+    MedalWins = 10
+    MedalGame = 11
+    MedalSpecialKills = 12
+    MedalSprees = 13
+    MedalMultiKills = 14
+    MedalAbilities = 15
+
+
+class UnitType(DocumentedIntEnum):
+    None_ = 0
+    Count = 1, 'Indicates the statistic is a simple count of something.'
+    PerGame = 2, 'Indicates the statistic is a per game average.'
+    Seconds = 3, 'Indicates the number of seconds'
+    Points = 4, 'Indicates the number of points earned'
+    Team = 5, 'Values represents a team ID'
+    Distance = 6, 'Values represents a distance (units to-be-determined)'
+    Percent = 7, 'Ratio represented as a whole value from 0 to 100.'
+    Ratio = 8, 'Ratio of something, shown with decimal places'
+    Boolean = 9, 'True or False'
+    WeaponType = 10, 'The stat is actually a weapon type.'
+    Standing = 11, 'Indicates victory, defeat, or something in between.'
+    Milliseconds = 12, 'Number of milliseconds some event spanned. For example, race time, or lap time.'
+    CompletionReason = 13, 'The value is a enumeration of the Completion Reason type.'
+
+
+class DestinyStatsMergeMethod(DocumentedIntEnum):
+    Add = 0, 'When collapsing multiple instances of the stat together, add the values.'
+    Min = 1, 'When collapsing multiple instances of the stat together, take the lower value.'
+    Max = 2, 'When collapsing multiple instances of the stat together, take the higher value.'
+
+
+class DestinyStatsGroupType(DocumentedIntEnum):
+    None_ = 0
+    General = 1
+    Weapons = 2
+    Medals = 3
+    ReservedGroups = 100, (
+        'This is purely to serve as the dividing line between filterable and un-filterable groups. Below this number '
+        'is a group you can pass as a filter. Above it are groups used in very specific circumstances and not relevant '
+        'for filtering.'
+    )
+    Leaderboard = 101, 'Only applicable while generating leaderboards.'
+    Activity = 102, 'These will *only* be consumed by GetAggregateStatsByActivity'
+    UniqueWeapon = 103, 'These are only consumed and returned by GetUniqueWeaponHistory'
+    Internal = 104

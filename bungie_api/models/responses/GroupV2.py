@@ -68,7 +68,7 @@ class GroupSearch(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -120,7 +120,7 @@ class EditOptionalConversation(BaseResponse):
 
 
 class GetMembersOfGroup(PaginatedBaseResponse):
-    Response: entities.GroupsV2.SearchResultOfGroupMember
+    Response: entities.SearchResultOfGroupMember
 
     @property
     def is_paginating(self) -> bool:
@@ -145,7 +145,7 @@ class GetMembersOfGroup(PaginatedBaseResponse):
 
 
 class GetAdminsAndFounderOfGroup(PaginatedBaseResponse):
-    Response: entities.GroupsV2.SearchResultOfGroupMember
+    Response: entities.SearchResultOfGroupMember
 
     @property
     def is_paginating(self) -> bool:
@@ -186,7 +186,7 @@ class UnbanMember(BaseResponse):
 
 
 class GetBannedMembersOfGroup(PaginatedBaseResponse):
-    Response: entities.GroupsV2.SearchResultOfGroupBan
+    Response: entities.SearchResultOfGroupBan
 
     @property
     def is_paginating(self) -> bool:
@@ -215,7 +215,7 @@ class AbdicateFoundership(BaseResponse):
 
 
 class GetPendingMemberships(PaginatedBaseResponse):
-    Response: entities.GroupsV2.SearchResultOfGroupMemberApplication
+    Response: entities.SearchResultOfGroupMemberApplication
 
     @property
     def is_paginating(self) -> bool:
@@ -240,7 +240,7 @@ class GetPendingMemberships(PaginatedBaseResponse):
 
 
 class GetInvitedIndividuals(PaginatedBaseResponse):
-    Response: entities.GroupsV2.SearchResultOfGroupMemberApplication
+    Response: entities.SearchResultOfGroupMemberApplication
 
     @property
     def is_paginating(self) -> bool:
@@ -335,7 +335,7 @@ class RecoverGroupForFounder(PaginatedBaseResponse):
 
 
 class GetPotentialGroupsForMember(PaginatedBaseResponse):
-    Response: entities.GroupsV2.GetGroupsForMemberResponse
+    Response: entities.GroupsV2.GroupPotentialMembershipSearchResponse
 
     @property
     def is_paginating(self) -> bool:

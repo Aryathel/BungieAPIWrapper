@@ -1,7 +1,6 @@
 from typing import (
     List,
     Optional,
-    Union,
 )
 
 from arya_api_framework import BaseModel
@@ -12,9 +11,21 @@ from .. import Destiny
 
 
 __all__ = [
+    'PartnerOfferClaimRequest',
     'PartnerOfferHistoryResponse',
     'PartnerOfferSkuHistoryResponse',
+    'CollectibleDefinitions',
+    'RewardAvailabilityModel',
+    'UserRewardAvailabilityModel',
+    'RewardDisplayProperties',
+    'BungieRewardDisplay',
 ]
+
+
+class PartnerOfferClaimRequest(BaseModel):
+    PartnerOfferId: str
+    BungieNetMembershipId: int
+    TransactionId: str
 
 
 class PartnerOfferHistoryResponse(BaseModel):

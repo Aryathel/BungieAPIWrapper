@@ -5,6 +5,8 @@ A Python wrapper for the `Bungie API <https://bungie-net.github.io/multi/>`_ uti
 `Pydantic <https://pydantic-docs.helpmanual.io/>`_ for response parsing and
 my `API Framework <https://apiframework.readthedocs.io/en/latest/>`_ for making requests.
 
+**Current Bungie API Version:** ``2.15.0``
+
 
 Note
 ----

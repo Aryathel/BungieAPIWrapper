@@ -23,6 +23,15 @@ __all__ = [
     'DestinyMilestoneRewardEntry',
     'DestinyMilestoneRewardCategory',
     'DestinyMilestone',
+    'DestinyMilestoneContentItemCategory',
+    'DestinyMilestoneContent',
+    'DestinyPublicMilestoneActivityVariant',
+    'DestinyPublicMilestoneActivity',
+    'DestinyPublicMilestoneChallenge',
+    'DestinyPublicMilestoneQuest',
+    'DestinyPublicMilestoneChallengeActivity',
+    'DestinyPublicMilestoneVendor',
+    'DestinyPublicMilestone',
 ]
 
 
@@ -77,6 +86,68 @@ class DestinyMilestone(BaseModel):
     vendorHashes: Optional[List[int]]
     vendors: Optional[List[DestinyMilestoneVendor]]
     rewards: Optional[List[DestinyMilestoneRewardCategory]]
+    startDate: Optional[ValidatedDatetime]
+    endDate: Optional[ValidatedDatetime]
+    order: int
+
+
+class DestinyMilestoneContentItemCategory(BaseModel):
+    title: str
+    itemHashes: List[int]
+
+
+class DestinyMilestoneContent(BaseModel):
+    about: str
+    status: str
+    tips: List[str]
+    itemCategories: Optional[List[DestinyMilestoneContentItemCategory]]
+
+
+class DestinyPublicMilestoneActivityVariant(BaseModel):
+    activityHash: int
+    activityModeHash: Optional[int]
+    activityModeType: Optional[HistoricalStats.Definitions.DestinyActivityModeType]
+
+
+class DestinyPublicMilestoneActivity(BaseModel):
+    activityHash: int
+    modifierHashes: List[int]
+    variants: List[DestinyPublicMilestoneActivityVariant]
+    activityModeHash: Optional[int]
+    activityModeType: Optional[HistoricalStats.Definitions.DestinyActivityModeType]
+
+
+class DestinyPublicMilestoneChallenge(BaseModel):
+    objectiveHash: int
+    activityHash: Optional[int]
+
+
+class DestinyPublicMilestoneQuest(BaseModel):
+    questItemHash: int
+    activity: Optional[DestinyPublicMilestoneActivity]
+    challenges: Optional[List[DestinyPublicMilestoneChallenge]]
+
+
+class DestinyPublicMilestoneChallengeActivity(BaseModel):
+    activityHash: int
+    challengeObjectiveHashes: List[int]
+    modifierHashes: Optional[List[int]]
+    loadoutRequirementIndex: Optional[int]
+    phaseHashes: Optional[List[int]]
+    booleanActivityOptions: Optional[Mapping[int, bool]]
+
+
+class DestinyPublicMilestoneVendor(BaseModel):
+    vendorHash: int
+    previewItemHash: Optional[int]
+
+
+class DestinyPublicMilestone(BaseModel):
+    milestoneHash: int
+    availableQuests: Optional[List[DestinyPublicMilestoneQuest]]
+    activities: Optional[List[DestinyPublicMilestoneChallengeActivity]]
+    vendorHashes: Optional[List[int]]
+    vendors: Optional[List[DestinyPublicMilestoneVendor]]
     startDate: Optional[ValidatedDatetime]
     endDate: Optional[ValidatedDatetime]
     order: int

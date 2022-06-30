@@ -6,6 +6,14 @@ __all__ = [
     'ForumTopicsQuickDateEnum',
     'ForumTopicsSortEnum',
     'ForumThreadSortEnum',
+    'CommunityContentSortMode',
+    'ForumMediaType',
+    'ForumPostCategoryEnums',
+    'ForumFlagsEnum',
+    'ForumPostPopularity',
+    'ForumRecruitmentIntensityLabel',
+    'ForumRecruitmentToneLabel',
+    'ForumPostSortEnum',
 ]
 
 
@@ -43,3 +51,69 @@ class ForumTopicsSortEnum(DocumentedIntEnum):
 class ForumThreadSortEnum(DocumentedIntEnum):
     Newest = 0
     Oldest = 1
+
+
+class CommunityContentSortMode(DocumentedIntEnum):
+    Trending = 0
+    Latest = 1
+    HighestRated = 2
+
+
+class ForumMediaType(DocumentedIntEnum):
+    None_ = 0
+    Image = 1
+    Video = 2
+    Youtube = 3
+
+
+class ForumPostCategoryEnums(DocumentedIntFlag):
+    None_ = 0
+    TextOnly = 1
+    Media = 2
+    Link = 4
+    Poll = 8
+    Question = 16
+    Answered = 32
+    Announcement = 64
+    ContentComment = 128
+    BungieOfficial = 256
+    NinjaOfficial: 512
+    Recruitment: 1024
+
+
+class ForumFlagsEnum(DocumentedIntFlag):
+    None_ = 0
+    BungieStaffPost = 1
+    ForumNinjaPost = 2
+    ForumMentorPost = 4
+    TopicBungieStaffPosted = 8
+    TopicBungieVolunteerPosted = 16
+    QuestionAnsweredByBungie = 32
+    QuestionAnsweredByNinja = 64
+    CommunityContent = 128
+
+
+class ForumPostPopularity(DocumentedIntEnum):
+    Empty = 0
+    Default = 1
+    Discussed = 2
+    CoolStory = 3
+    HeatingUp = 4
+    Hot = 5
+
+
+class ForumRecruitmentIntensityLabel(DocumentedIntEnum):
+    None_ = 0
+    Casual = 1
+    Professional = 2
+
+
+class ForumRecruitmentToneLabel(DocumentedIntEnum):
+    None_ = 0
+    FamilyFriendly = 1
+    Rowdy = 2
+
+
+class ForumPostSortEnum(DocumentedIntEnum):
+    Default = 0
+    OldestFirst = 1

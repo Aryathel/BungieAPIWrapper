@@ -39,20 +39,15 @@ class Forum(SubClient, name='forum', relative_path='/Forum'):
             category_filter: Optional[
                 Union[int, ForumTopicsCategoryFiltersEnum]
             ] = ForumTopicsCategoryFiltersEnum.None_,
-            locales: Optional[Union[str, List[str]]] = 'en',
+            locales: Optional[Union[str, List[str]]] = None,
             tagstring: Optional[str] = None,
     ) -> responses.Forum.GetTopicsPaged:
-        if not isinstance(sort, ForumTopicsSortEnum):
-            sort = ForumTopicsSortEnum(sort)
-        if not isinstance(quick_date, ForumTopicsQuickDateEnum):
-            quick_date = ForumTopicsQuickDateEnum(quick_date)
-        if not isinstance(category_filter, ForumTopicsCategoryFiltersEnum):
-            category_filter = ForumTopicsCategoryFiltersEnum(category_filter)
-        if isinstance(locales, list):
-            locales = ', '.join(locales)
+        sort = ForumTopicsSortEnum.int_validator(sort)
+        quick_date = ForumTopicsQuickDateEnum.int_validator(quick_date)
+        category_filter = ForumTopicsCategoryFiltersEnum.int_validator(category_filter)
 
         return self.get(
-            f'/GetTopicsPaged/{page}/{page_size}/{group}/{sort.value}/{quick_date.value}/{category_filter.value}/',
+            f'/GetTopicsPaged/{page}/{page_size}/{group}/{sort}/{quick_date}/{category_filter}/',
             parameters=queries.Forum.GetTopicsPaged(
                 locales=locales,
                 tagstring=tagstring,
@@ -78,19 +73,14 @@ class Forum(SubClient, name='forum', relative_path='/Forum'):
             category_filter: Optional[
                 Union[int, ForumTopicsCategoryFiltersEnum]
             ] = ForumTopicsCategoryFiltersEnum.None_,
-            locales: Optional[Union[str, List[str]]] = 'en'
+            locales: Optional[Union[str, List[str]]] = None
     ) -> responses.Forum.GetCoreTopicsPaged:
-        if not isinstance(sort, ForumTopicsSortEnum):
-            sort = ForumTopicsSortEnum(sort)
-        if not isinstance(quick_date, ForumTopicsQuickDateEnum):
-            quick_date = ForumTopicsQuickDateEnum(quick_date)
-        if not isinstance(category_filter, ForumTopicsCategoryFiltersEnum):
-            category_filter = ForumTopicsCategoryFiltersEnum(category_filter)
-        if isinstance(locales, list):
-            locales = ', '.join(locales)
+        sort = ForumTopicsSortEnum.int_validator(sort)
+        quick_date = ForumTopicsQuickDateEnum.int_validator(quick_date)
+        category_filter = ForumTopicsCategoryFiltersEnum.int_validator(category_filter)
 
         return self.get(
-            f'/GetCoreTopicsPaged/{page}/{sort.value}/{quick_date.value}/{category_filter.value}/',
+            f'/GetCoreTopicsPaged/{page}/{sort}/{quick_date}/{category_filter}/',
             parameters=queries.Forum.GetCoreTopicsPaged(locales=locales),
             response_format=responses.Forum.GetCoreTopicsPaged
         )
@@ -152,13 +142,12 @@ class Forum(SubClient, name='forum', relative_path='/Forum'):
             show_banned: Optional[:py:class:`bool`]
                 Whether to include banned posts in the responses. Defaults to ``False``.
         """
-        if not isinstance(sort, ForumThreadSortEnum):
-            sort = ForumThreadSortEnum(sort)
+        sort = ForumThreadSortEnum.int_validator(sort)
 
         return self.get(
             f'/GetPostsThreadedPaged/{parent_post_id}/{page}/{page_size}/{reply_size}/{get_parent_post}'
-            f'/{root_thread_mode}/{sort.value}',
-            parameters=queries.Forum.GetPostsThreadedPaged(showbanned=show_banned if show_banned else None),
+            f'/{root_thread_mode}/{sort}',
+            parameters=queries.Forum.GetPostsThreadedPaged(showbanned=show_banned),
             response_format=responses.Forum.GetPostsThreadedPaged
         )
 
@@ -185,13 +174,12 @@ class Forum(SubClient, name='forum', relative_path='/Forum'):
             sort: Optional[Union[int, ForumThreadSortEnum]] = ForumThreadSortEnum.Newest,
             show_banned: Optional[bool] = False
     ) -> responses.Forum.GetPostsThreadedPagedFromChild:
-        if not isinstance(sort, ForumThreadSortEnum):
-            sort = ForumThreadSortEnum(sort)
+        sort = ForumThreadSortEnum.int_validator(sort)
 
         return self.get(
             f'/GetPostsThreadedPagedFromChild/{child_post_id}/{page}/{page_size}/{reply_size}/{root_thread_mode}'
-            f'/{sort.value}/',
-            parameters=queries.Forum.GetPostsThreadedPagedFromChild(showbanned=show_banned if show_banned else None),
+            f'/{sort}/',
+            parameters=queries.Forum.GetPostsThreadedPagedFromChild(showbanned=show_banned),
             response_format=responses.Forum.GetPostsThreadedPagedFromChild
         )
 

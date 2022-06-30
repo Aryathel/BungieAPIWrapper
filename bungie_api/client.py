@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 from typing import Optional
 
 from arya_api_framework import SyncClient
-
-from . import models
+from arya_api_framework.utils import apiclient, endpoint
 
 from .utils import process_errors
+from .models import responses, queries
 
 if TYPE_CHECKING:
     from .grouped_endpoints.app import App
@@ -16,6 +16,10 @@ if TYPE_CHECKING:
     from .grouped_endpoints.groupv2 import GroupV2
     from .grouped_endpoints.tokens import Tokens
     from .grouped_endpoints.destiny2 import Destiny2
+    from .grouped_endpoints.community_content import CommunityContent
+    from .grouped_endpoints.trending import Trending
+    from .grouped_endpoints.fireteam import Fireteam
+    from .grouped_endpoints.social import Social
 
 
 __all__ = [
@@ -27,6 +31,7 @@ API_ROOT = "https://www.bungie.net/Platform"
 OAUTH_URL = "https://www.bungie.net/en/OAuth/Authorize"
 
 
+@apiclient
 class BungieAPI(
         SyncClient,
         uri=API_ROOT,
@@ -39,6 +44,10 @@ class BungieAPI(
             ('.grouped_endpoints.groupv2', 'bungie_api'),
             ('.grouped_endpoints.tokens', 'bungie_api'),
             ('.grouped_endpoints.destiny2', 'bungie_api'),
+            ('.grouped_endpoints.community_content', 'bungie_api'),
+            ('.grouped_endpoints.trending', 'bungie_api'),
+            ('.grouped_endpoints.fireteam', 'bungie_api'),
+            ('.grouped_endpoints.social', 'bungie_api'),
         ],
         error_responses={
             403: process_errors,
@@ -55,6 +64,10 @@ class BungieAPI(
     groupv2: 'GroupV2'
     tokens: 'Tokens'
     destiny2: 'Destiny2'
+    community_content: 'CommunityContent'
+    trending: 'Trending'
+    fireteam: 'Fireteam'
+    social: 'Social'
 
     api_key: str
     client_id: Optional[int]
@@ -66,3 +79,67 @@ class BungieAPI(
         self.client_id = client_id
 
         self.headers['X-API-Key'] = self.api_key
+
+    @endpoint(
+        path='/GetAvailableLocales/',
+        name='GetAvailableLocales',
+        description='List of available localization cultures.',
+        href=(
+            'https://bungie-net.github.io/multi/operation_get_-GetAvailableLocales.html'
+            '#operation_get_-GetAvailableLocales'
+        ),
+        method='GET'
+    )
+    def get_available_locales(self) -> responses.GetAvailableLocales:
+        return self.get(
+            '/GetAvailableLocales/',
+            response_format=responses.GetAvailableLocales
+        )
+
+    @endpoint(
+        path='/Settings/',
+        name='GetCommonSettings',
+        description='Get the common settings used by the Bungie.net environment.',
+        href=(
+            'https://bungie-net.github.io/multi/operation_get_-GetCommonSettings.html#operation_get_-GetCommonSettings'
+        ),
+        method='GET'
+    )
+    def get_common_settings(self) -> responses.GetCommonSettings:
+        return self.get(
+            '/Settings/',
+            response_format=responses.GetCommonSettings
+        )
+
+    @endpoint(
+        path='/UserSystemOverrides/',
+        name='GetUserSystemOverrides',
+        description='Get the user-specific system overrides that should be respected alongside common systems.',
+        href=(
+            'https://bungie-net.github.io/multi/operation_get_-GetUserSystemOverrides.html'
+            '#operation_get_-GetUserSystemOverrides'
+        ),
+        method='GET'
+    )
+    def get_user_system_overrides(self) -> responses.GetUserSystemOverrides:
+        return self.get(
+            '/UserSystemOverrides/',
+            response_format=responses.GetUserSystemOverrides
+        )
+
+    @endpoint(
+        path='/GlobalAlerts/',
+        name='GetGlobalAlerts',
+        description=(
+            'Gets any active global alert for display in the forum banners, help pages, etc. Usually used for DOC '
+            'alerts.'
+        ),
+        href='https://bungie-net.github.io/multi/operation_get_-GetGlobalAlerts.html#operation_get_-GetGlobalAlerts',
+        method='GET'
+    )
+    def get_global_alerts(self, include_streaming: Optional[bool] = None) -> responses.GetGlobalAlerts:
+        return self.get(
+            '/GlobalAlerts/',
+            parameters=queries.GetGlobalAlerts(includestreaming=include_streaming),
+            response_format=responses.GetGlobalAlerts
+        )

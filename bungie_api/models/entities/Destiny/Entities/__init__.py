@@ -3,6 +3,7 @@ from . import (
     Inventory,
     Items,
     Profiles,
+    Vendors,
 )
 
 __all__ = [
@@ -10,4 +11,5 @@ __all__ = [
     'Inventory',
     'Items',
     'Profiles',
+    'Vendors',
 ]

@@ -7,6 +7,15 @@ from .classes import (
     DestinyMilestoneRewardEntry,
     DestinyMilestoneRewardCategory,
     DestinyMilestone,
+    DestinyMilestoneContentItemCategory,
+    DestinyMilestoneContent,
+    DestinyPublicMilestoneActivityVariant,
+    DestinyPublicMilestoneActivity,
+    DestinyPublicMilestoneChallenge,
+    DestinyPublicMilestoneQuest,
+    DestinyPublicMilestoneChallengeActivity,
+    DestinyPublicMilestoneVendor,
+    DestinyPublicMilestone,
 )
 
 
@@ -19,4 +28,13 @@ __all__ = [
     'DestinyMilestoneRewardEntry',
     'DestinyMilestoneRewardCategory',
     'DestinyMilestone',
+    'DestinyMilestoneContentItemCategory',
+    'DestinyMilestoneContent',
+    'DestinyPublicMilestoneActivityVariant',
+    'DestinyPublicMilestoneActivity',
+    'DestinyPublicMilestoneChallenge',
+    'DestinyPublicMilestoneQuest',
+    'DestinyPublicMilestoneChallengeActivity',
+    'DestinyPublicMilestoneVendor',
+    'DestinyPublicMilestone',
 ]

@@ -7,6 +7,11 @@ from yarl import URL
 from ..models import responses
 
 
+__all__ = [
+    'OAuth'
+]
+
+
 class OAuth(SubClient, name='oauth', relative_path='/App/OAuth/'):
     @property
     def oauth_url(self) -> str:

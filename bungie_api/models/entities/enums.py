@@ -3,6 +3,8 @@ from .framework import DocumentedIntEnum
 
 __all__ = [
     'BungieMembershipType',
+    'GlobalAlertLevel',
+    'GlobalAlertType',
 ]
 
 
@@ -19,3 +21,15 @@ class BungieMembershipType(DocumentedIntEnum):
         '"All" is only valid for searching capabilities: you need to pass the actual matching BungieMembershipType for '
         'any query where you pass a known membershipId.'
     )
+
+
+class GlobalAlertLevel(DocumentedIntEnum):
+    Unknown = 0
+    Blue = 1
+    Yellow = 2
+    Red = 3
+
+
+class GlobalAlertType(DocumentedIntEnum):
+    GlobalAlert = 0
+    StreamingAlert = 1

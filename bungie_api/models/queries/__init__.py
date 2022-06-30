@@ -1,19 +1,25 @@
 from . import (
     App,
-    User,
     Content,
+    Destiny2,
+    Fireteam,
     Forum,
     GroupsV2,
-    Tokens,
-    Destiny2,
+    User,
+)
+
+from .classes import (
+    GetGlobalAlerts,
 )
 
 __all__ = [
     'App',
-    'User',
     'Content',
+    'Destiny2',
+    'Fireteam',
     'Forum',
     'GroupsV2',
-    'Tokens',
-    'Destiny2',
+    'User',
+
+    'GetGlobalAlerts',
 ]

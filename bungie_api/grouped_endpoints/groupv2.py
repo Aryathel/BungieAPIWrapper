@@ -7,26 +7,29 @@ from ..decorators import destinyclient, oauth_required
 from ..models import responses, queries
 from ..models.entities.Applications import ApplicationScopes
 from ..models.entities.User import UserMembership
-from ..models.entities import BungieMembershipType
-from ..models.entities.GroupsV2 import (
-    GroupType,
-    GroupSortBy,
-    GroupMemberCountFilter,
-    GroupDateRange,
-    MembershipOption,
-    ChatSecuritySetting,
-    GroupHomepage,
-    GroupPostPublicity,
-    ClanBanner,
-    HostGuidedGamesPermissionLevel,
-    RuntimeGroupMemberType,
-    GroupsForMemberFilter
+from ..models.entities import (
+    BungieMembershipType,
+    GroupsV2 as Groups,
 )
 
 
 __all__ = [
     'GroupV2',
 ]
+
+
+MemberType = Union[int, str, BungieMembershipType]
+GroupType = Union[int, str, Groups.GroupType]
+DateRangeType = Union[int, str, Groups.GroupDateRange]
+GroupSortByType = Union[int, str, Groups.GroupSortBy]
+MemberCountFilterType = Union[int, str, Groups.GroupMemberCountFilter]
+MemberOptionType = Union[int, str, Groups.MembershipOption]
+ChatSecurityType = Union[int, str, Groups.ChatSecuritySetting]
+HomepageType = Union[int, str, Groups.GroupHomepage]
+PublicityType = Union[int, str, Groups.GroupPostPublicity]
+HostGGPermissionType = Union[int, str, Groups.HostGuidedGamesPermissionLevel]
+GroupMemberType = Union[int, str, Groups.RuntimeGroupMemberType]
+GroupsForMemberFilterType = Union[int, str, Groups.GroupsForMemberFilter]
 
 
 @destinyclient
@@ -80,13 +83,12 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     )
     def get_user_clan_invite_setting(
             self,
-            membership_type: Union[int, BungieMembershipType]
+            membership_type: MemberType
     ) -> responses.GroupV2.GetUserClanInviteSetting:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.get(
-            f'/GetUserClanInviteSetting/{membership_type.value}/',
+            f'/GetUserClanInviteSetting/{membership_type}/',
             response_format=responses.GroupV2.GetUserClanInviteSetting
         )
 
@@ -103,14 +105,14 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     )
     def get_recommended_groups(
             self,
-            group_type: Union[int, GroupType] = GroupType.General,
-            date_range: int = 0,
+            group_type: Optional[GroupType] = Groups.GroupType.General,
+            date_range: Optional[DateRangeType] = Groups.GroupDateRange.All,
     ) -> responses.GroupV2.GetRecommendedGroups:
-        if not isinstance(group_type, GroupType):
-            group_type = GroupType(group_type)
+        group_type = Groups.GroupType.int_validator(group_type)
+        date_range = Groups.GroupDateRange.int_validator(date_range)
 
         return self.post(
-            f'/Recommended/{group_type.value}/{date_range}/',
+            f'/Recommended/{group_type}/{date_range}/',
             response_format=responses.GroupV2.GetRecommendedGroups
         )
 
@@ -127,10 +129,10 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def group_search(
             self,
             name: Optional[str] = None,
-            group_type: Optional[Union[int, GroupType]] = None,
-            creation_date: Optional[Union[int, GroupDateRange]] = None,
-            sort_by: Optional[Union[int, GroupSortBy]] = None,
-            group_member_count_filter: Optional[Union[int, GroupMemberCountFilter]] = None,
+            group_type: GroupType = None,
+            creation_date: DateRangeType = None,
+            sort_by: GroupSortByType = None,
+            group_member_count_filter: MemberCountFilterType = None,
             locale_filter: Optional[str] = None,
             tag_text: Optional[str] = None,
             items_per_page: Optional[int] = None,
@@ -139,7 +141,7 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     ) -> responses.GroupV2.GroupSearch:
         return self.post(
             '/Search/',
-            body=queries.GroupsV2.GroupQuery(
+            body=Groups.GroupQuery(
                 name=name,
                 groupType=group_type,
                 creationDate=creation_date,
@@ -183,13 +185,12 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def get_group_by_name(
             self,
             group_name: str,
-            group_type: Union[int, GroupType] = GroupType.General
+            group_type: GroupType = Groups.GroupType.General
     ) -> responses.GroupV2.GetGroupByName:
-        if not isinstance(group_type, GroupType):
-            group_type = GroupType(group_type)
+        group_type = Groups.GroupType.int_validator(group_type)
 
         return self.get(
-            f'/Name/{group_name}/{group_type.value}/',
+            f'/Name/{group_name}/{group_type}/',
             response_format=responses.GroupV2.GetGroupByName
         )
 
@@ -206,11 +207,11 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def get_group_by_name_v2(
             self,
             group_name: str,
-            group_type: Union[int, GroupType] = GroupType.General
+            group_type: GroupType = Groups.GroupType.General
     ) -> responses.GroupV2.GetGroupByNameV2:
         return self.post(
             '/NameV2/',
-            body=queries.GroupsV2.GroupNameSearchRequest(
+            body=Groups.GroupNameSearchRequest(
                 groupName=group_name,
                 groupType=group_type
             ),
@@ -260,19 +261,19 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             avatar_image_index: Optional[int] = None,
             tags: Optional[str] = None,
             is_public: Optional[bool] = None,
-            membership_option: Optional[Union[int, MembershipOption]] = None,
+            membership_option: Optional[MemberOptionType] = None,
             is_public_topic_admin_only: Optional[bool] = None,
             allow_chat: Optional[bool] = None,
-            chat_security: Optional[Union[int, ChatSecuritySetting]] = None,
+            chat_security: Optional[ChatSecurityType] = None,
             callsign: Optional[str] = None,
             locale: Optional[str] = None,
-            homepage: Optional[Union[int, GroupHomepage]] = None,
+            homepage: Optional[HomepageType] = None,
             enable_invitation_messaging_for_admins: Optional[bool] = None,
-            default_publicity: Optional[Union[int, GroupPostPublicity]] = None
+            default_publicity: Optional[PublicityType] = None
     ) -> responses.GroupV2.EditGroup:
         return self.post(
             f'/{group_id}/Edit/',
-            body=queries.GroupsV2.GroupEditAction(
+            body=Groups.GroupEditAction(
                 name=name,
                 about=about,
                 motto=motto,
@@ -320,7 +321,7 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     ) -> responses.GroupV2.EditClanBanner:
         return self.post(
             f'/{group_id}/EditClanBanner/',
-            body=ClanBanner(
+            body=Groups.ClanBanner(
                 decalId=decal_id,
                 decalColorId=decal_color_id,
                 decalBackgroundColorId=decal_background_color_id,
@@ -351,15 +352,15 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             group_id: int,
             invite_permission_override: Optional[bool] = None,
             update_culture_permission_override: Optional[bool] = None,
-            host_guided_game_permission_override: Optional[Union[int, HostGuidedGamesPermissionLevel]] = None,
+            host_guided_game_permission_override: Optional[HostGGPermissionType] = None,
             update_banner_permission_override: Optional[bool] = None,
-            join_level: Optional[Union[int, RuntimeGroupMemberType]] = None
+            join_level: Optional[GroupMemberType] = None
     ) -> responses.GroupV2.EditFounderOptions:
         return self.post(
             f'/{group_id}/EditFounderOptions/',
-            body=queries.GroupsV2.GroupOptionsEditAction(
+            body=Groups.GroupOptionsEditAction(
                 InvitePermissionOverride=invite_permission_override,
-                UpdateCulturePermissionoverride=update_culture_permission_override,
+                UpdateCulturePermissionOverride=update_culture_permission_override,
                 HostGuidedGamePermissionOverride=host_guided_game_permission_override,
                 UpdateBannerPermissionOverride=update_banner_permission_override,
                 JoinLevel=join_level
@@ -382,11 +383,11 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             chat_name: str,
-            chat_security: Union[int, ChatSecuritySetting] = ChatSecuritySetting.Group
+            chat_security: Union[ChatSecurityType] = Groups.ChatSecuritySetting.Group
     ) -> responses.GroupV2.AddOptionalConversation:
         return self.post(
             f'/{group_id}/OptionalConversations/Add/',
-            body=queries.GroupsV2.GroupOptionalConversationAddRequest(
+            body=Groups.GroupOptionalConversationAddRequest(
                 chatName=chat_name,
                 chatSecurity=chat_security
             ),
@@ -412,11 +413,11 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             conversation_id: int,
             chat_enabled: Optional[bool] = None,
             chat_name: Optional[str] = None,
-            chat_security: Optional[Union[int, ChatSecuritySetting]] = None
+            chat_security: Optional[ChatSecurityType] = None
     ) -> responses.GroupV2.EditOptionalConversation:
         return self.post(
             f'/{group_id}/OptionalConversations/Edit/{conversation_id}/',
-            body=queries.GroupsV2.GroupOptionalConversationEditRequest(
+            body=Groups.GroupOptionalConversationEditRequest(
                 chatEnabled=chat_enabled,
                 chatName=chat_name,
                 chatSecurity=chat_security
@@ -438,7 +439,7 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             page: Optional[int] = 1,
-            member_type: Optional[Union[int, RuntimeGroupMemberType]] = RuntimeGroupMemberType.None_,
+            member_type: Optional[GroupMemberType] = Groups.RuntimeGroupMemberType.None_,
             name_search: Optional[str] = None,
     ) -> responses.GroupV2.GetMembersOfGroup:
         return self.get(
@@ -490,16 +491,14 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
-            member_type: Union[int, RuntimeGroupMemberType],
+            membership_type: MemberType,
+            member_type: GroupMemberType,
     ) -> responses.GroupV2.EditGroupMembership:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
-        if not isinstance(member_type, RuntimeGroupMemberType):
-            member_type = RuntimeGroupMemberType(member_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
+        member_type = Groups.RuntimeGroupMemberType.int_validator(member_type)
 
         return self.post(
-            f'/{group_id}/Members/{membership_type.value}/{membership_id}/SetMembershipType/{member_type.value}/',
+            f'/{group_id}/Members/{membership_type}/{membership_id}/SetMembershipType/{member_type}/',
             response_format=responses.GroupV2.EditGroupMembership
         )
 
@@ -521,13 +520,12 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType]
+            membership_type: MemberType
     ) -> responses.GroupV2.KickMember:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/{membership_type.value}/{membership_id}/Kick/',
+            f'/{group_id}/Members/{membership_type}/{membership_id}/Kick/',
             response_format=responses.GroupV2.KickMember
         )
 
@@ -545,16 +543,15 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
+            membership_type: MemberType,
             comment: Optional[str] = None,
             length: Optional[int] = None
     ) -> responses.GroupV2.BanMember:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/{membership_type.value}/{membership_id}/Ban/',
-            body=queries.GroupsV2.GroupBanRequest(
+            f'/{group_id}/Members/{membership_type}/{membership_id}/Ban/',
+            body=Groups.GroupBanRequest(
                 comment=comment,
                 length=length
             ),
@@ -576,13 +573,12 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType]
+            membership_type: MemberType
     ) -> responses.GroupV2.UnbanMember:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/{membership_type.value}/{membership_id}/Unban/',
+            f'/{group_id}/Members/{membership_type}/{membership_id}/Unban/',
             response_format=responses.GroupV2.UnbanMember
         )
 
@@ -628,14 +624,13 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def abdicate_foundership(
             self,
             group_id: int,
-            membership_type: Union[int, BungieMembershipType],
-            founder_id_new
+            new_founder_id: int,
+            membership_type: MemberType,
     ) -> responses.GroupV2.AbdicateFoundership:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Admin/AbdicateFoundership/{membership_type.value}/{founder_id_new}/',
+            f'/{group_id}/Admin/AbdicateFoundership/{membership_type}/{new_founder_id}/',
             response_format=responses.GroupV2.AbdicateFoundership
         )
 
@@ -704,7 +699,7 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     ) -> responses.GroupV2.ApproveAllPending:
         return self.post(
             f'/{group_id}/Members/ApproveAll/',
-            body=queries.GroupsV2.GroupApplicationRequest(message=message),
+            body=Groups.GroupApplicationRequest(message=message),
             response_format=responses.GroupV2.ApproveAllPending
         )
 
@@ -726,7 +721,7 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     ) -> responses.GroupV2.DenyAllPending:
         return self.post(
             f'/{group_id}/Members/DenyAll/',
-            body=queries.GroupsV2.GroupApplicationRequest(message=message),
+            body=Groups.GroupApplicationRequest(message=message),
             response_format=responses.GroupV2.DenyAllPending
         )
 
@@ -745,11 +740,11 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             memberships: Union[List[Dict[str, Union[int, str]]], List[UserMembership]],
-            message: Optional[str]
+            message: Optional[str] = None
     ) -> responses.GroupV2.ApprovePendingForList:
         return self.post(
             f'/{group_id}/Members/ApproveList/',
-            body=queries.GroupsV2.GroupApplicationListRequest(
+            body=Groups.GroupApplicationListRequest(
                 memberships=memberships,
                 message=message
             ),
@@ -771,15 +766,14 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
+            membership_type: MemberType,
             message: Optional[str] = None
     ) -> responses.GroupV2.ApprovePending:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/Approve/{membership_type.value}/{membership_id}/',
-            body=queries.GroupsV2.GroupApplicationRequest(message=message),
+            f'/{group_id}/Members/Approve/{membership_type}/{membership_id}/',
+            body=Groups.GroupApplicationRequest(message=message),
             response_format=responses.GroupV2.ApprovePending
         )
 
@@ -798,11 +792,11 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             memberships: Union[List[Dict[str, Union[int, str]]], List[UserMembership]],
-            message: Optional[str]
+            message: Optional[str] = None
     ) -> responses.GroupV2.DenyPendingForList:
         return self.post(
             f'/{group_id}/Members/DenyList/',
-            body=queries.GroupsV2.GroupApplicationListRequest(
+            body=Groups.GroupApplicationListRequest(
                 memberships=memberships,
                 message=message
             ),
@@ -822,19 +816,16 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def get_groups_for_member(
             self,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
-            group_type: Union[int, GroupType] = GroupType.Clan,
-            group_filter: Union[int, GroupsForMemberFilter] = GroupsForMemberFilter.All
+            membership_type: MemberType,
+            group_type: GroupType = Groups.GroupType.Clan,
+            group_filter: GroupsForMemberFilterType = Groups.GroupsForMemberFilter.All
     ) -> responses.GroupV2.GetGroupsForMember:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
-        if not isinstance(group_type, GroupType):
-            group_type = GroupType(group_type)
-        if not isinstance(group_filter, GroupsForMemberFilter):
-            group_filter = GroupsForMemberFilter(group_filter)
+        membership_type = BungieMembershipType.int_validator(membership_type)
+        group_type = Groups.GroupType.int_validator(group_type)
+        group_filter = Groups.GroupsForMemberFilter.int_validator(group_filter)
 
         return self.get(
-            f'/User/{membership_type.value}/{membership_id}/{group_filter.value}/{group_type.value}/',
+            f'/User/{membership_type}/{membership_id}/{group_filter}/{group_type}/',
             response_format=responses.GroupV2.GetGroupsForMember
         )
 
@@ -851,16 +842,14 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def recover_group_for_founder(
             self,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
-            group_type: Union[int, GroupType] = GroupType.Clan
+            membership_type: MemberType,
+            group_type: GroupType = Groups.GroupType.Clan
     ) -> responses.GroupV2.RecoverGroupForFounder:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
-        if not isinstance(group_type, GroupType):
-            group_type = GroupType(group_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
+        group_type = Groups.GroupType.int_validator(group_type)
 
         return self.get(
-            f'/Recover/{membership_type.value}/{membership_id}/{group_type.value}/',
+            f'/Recover/{membership_type}/{membership_id}/{group_type}/',
             response_format=responses.GroupV2.RecoverGroupForFounder
         )
 
@@ -877,19 +866,16 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
     def get_potential_groups_for_member(
             self,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
-            group_type: Union[int, GroupType] = GroupType.Clan,
-            group_filter: Union[int, GroupsForMemberFilter] = GroupsForMemberFilter.All
+            membership_type: MemberType,
+            group_type: GroupType = Groups.GroupType.Clan,
+            group_filter: GroupsForMemberFilterType = Groups.GroupsForMemberFilter.All
     ) -> responses.GroupV2.GetPotentialGroupsForMember:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
-        if not isinstance(group_type, GroupType):
-            group_type = GroupType(group_type)
-        if not isinstance(group_filter, GroupsForMemberFilter):
-            group_filter = GroupsForMemberFilter(group_filter)
+        membership_type = BungieMembershipType.int_validator(membership_type)
+        group_type = Groups.GroupType.int_validator(group_type)
+        group_filter = Groups.GroupsForMemberFilter.int_validator(group_filter)
 
         return self.get(
-            f'/User/Potential/{membership_type.value}/{membership_id}/{group_filter.value}/{group_type.value}/',
+            f'/User/Potential/{membership_type}/{membership_id}/{group_filter}/{group_type}/',
             response_format=responses.GroupV2.GetPotentialGroupsForMember
         )
 
@@ -908,15 +894,14 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType],
+            membership_type: MemberType,
             message: Optional[str] = None
     ) -> responses.GroupV2.IndividualGroupInvite:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/IndividualInvite/{membership_type.value}/{membership_id}/',
-            body=queries.GroupsV2.GroupApplicationRequest(message=message),
+            f'/{group_id}/Members/IndividualInvite/{membership_type}/{membership_id}/',
+            body=Groups.GroupApplicationRequest(message=message),
             response_format=responses.GroupV2.IndividualGroupInvite
         )
 
@@ -935,13 +920,12 @@ class GroupV2(SubClient, name='groupv2', relative_path='GroupV2'):
             self,
             group_id: int,
             membership_id: int,
-            membership_type: Union[int, BungieMembershipType]
+            membership_type: MemberType
     ) -> responses.GroupV2.IndividualGroupInviteCancel:
-        if not isinstance(membership_type, BungieMembershipType):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
 
         return self.post(
-            f'/{group_id}/Members/IndividualInviteCancel/{membership_type.value}/{membership_id}/',
+            f'/{group_id}/Members/IndividualInviteCancel/{membership_type}/{membership_id}/',
             response_format=responses.GroupV2.IndividualGroupInviteCancel
         )
 

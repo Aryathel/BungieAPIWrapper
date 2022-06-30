@@ -1,4 +1,4 @@
-from ..framework import DocumentedIntEnum
+from ..framework import DocumentedIntEnum, DocumentedIntFlag
 
 
 __all__ = [
@@ -14,6 +14,9 @@ __all__ = [
     'RuntimeGroupMemberType',
     'GroupApplicationResolveState',
     'GroupsForMemberFilter',
+    'Capabilities',
+    'AllianceStatus',
+    'GroupPotentialMemberStatus',
 ]
 
 
@@ -93,3 +96,26 @@ class GroupsForMemberFilter(DocumentedIntEnum):
     All = 0
     Founded = 1
     NonFounded = 2
+
+
+class Capabilities(DocumentedIntFlag):
+    None_ = 0
+    Leaderboards = 1
+    Callsign = 2
+    OptionalConversations = 4
+    ClanBanner = 8
+    D2InvestmentData = 16
+    Tags = 32
+    Alliances = 64
+
+
+class AllianceStatus(DocumentedIntEnum):
+    Unallied = 0
+    Parent = 1
+    Child = 2
+
+
+class GroupPotentialMemberStatus(DocumentedIntEnum):
+    None_ = 0
+    Applicant = 1
+    Invitee = 2

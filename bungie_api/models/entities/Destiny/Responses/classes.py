@@ -11,6 +11,7 @@ from .....utils import ValidatedDatetime
 from ... import Exceptions
 from .. import (
     Components,
+    Entities,
     DestinyGameVersions,
 )
 
@@ -19,6 +20,15 @@ __all__ = [
     'DestinyLinkedProfileResponse',
     'DestinyProfileUserInfoCard',
     'DestinyProfileResponse',
+    'DestinyCharacterResponse',
+    'DestinyItemResponse',
+    'DestinyVendorsResponse',
+    'PersonalDestinyVendorSaleItemSetComponent',
+    'DestinyVendorResponse',
+    'DestinyPublicVendorsResponse',
+    'PublicDestinyVendorSaleItemSetComponent',
+    'DestinyCollectibleNodeDetailResponse',
+    'DestinyItemChangeResponse',
 ]
 
 BungieMembershipType = ForwardRef('entities.BungieMembershipType')
@@ -86,9 +96,7 @@ DictionaryComponentResponseOfint64AndDestinyCharacterActivitiesComponent = Forwa
 DictionaryComponentResponseOfint64AndDestinyPlugSetsComponent = ForwardRef(
     'entities.DictionaryComponentResponseOfint64AndDestinyPlugSetsComponent'
 )
-DestinyBaseItemComponentSetOfuint32 = ForwardRef(
-    'entities.DestinyBaseItemComponentSetOfuint32'
-)
+DestinyBaseItemComponentSetOfuint32 = ForwardRef('entities.DestinyBaseItemComponentSetOfuint32')
 DictionaryComponentResponseOfint64AndDestinyPresentationNodesComponent = ForwardRef(
     'entities.DictionaryComponentResponseOfint64AndDestinyPresentationNodesComponent'
 )
@@ -104,9 +112,85 @@ DictionaryComponentResponseOfint64AndDestinyStringVariablesComponent = ForwardRe
 DictionaryComponentResponseOfint64AndDestinyCraftablesComponent = ForwardRef(
     'entities.DictionaryComponentResponseOfint64AndDestinyCraftablesComponent'
 )
-DestinyItemComponentSetOfint64 = ForwardRef(
-    'entities.DestinyItemComponentSetOfint64'
+DestinyItemComponentSetOfint64 = ForwardRef('entities.DestinyItemComponentSetOfint64')
+SingleComponentResponseOfDestinyCharacterComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCharacterComponent'
 )
+SingleComponentResponseOfDestinyCharacterProgressionComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCharacterProgressionComponent'
+)
+SingleComponentResponseOfDestinyCharacterRenderComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCharacterRenderComponent'
+)
+SingleComponentResponseOfDestinyCharacterActivitiesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCharacterActivitiesComponent'
+)
+SingleComponentResponseOfDestinyCharacterRecordsComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCharacterRecordsComponent'
+)
+SingleComponentResponseOfDestinyCollectiblesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCollectiblesComponent'
+)
+SingleComponentResponseOfDestinyCurrenciesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyCurrenciesComponent'
+)
+SingleComponentResponseOfDestinyItemComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemComponent'
+)
+SingleComponentResponseOfDestinyItemInstanceComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemInstanceComponent'
+)
+SingleComponentResponseOfDestinyItemObjectivesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemObjectivesComponent'
+)
+SingleComponentResponseOfDestinyItemPerksComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemPerksComponent'
+)
+SingleComponentResponseOfDestinyItemRenderComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemRenderComponent'
+)
+SingleComponentResponseOfDestinyItemStatsComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemStatsComponent'
+)
+SingleComponentResponseOfDestinyItemTalentGridComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemTalentGridComponent'
+)
+SingleComponentResponseOfDestinyItemSocketsComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemSocketsComponent'
+)
+SingleComponentResponseOfDestinyItemReusablePlugsComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemReusablePlugsComponent'
+)
+SingleComponentResponseOfDestinyItemPlugObjectivesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyItemPlugObjectivesComponent'
+)
+SingleComponentResponseOfDestinyVendorGroupComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyVendorGroupComponent'
+)
+DictionaryComponentResponseOfuint32AndDestinyVendorComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfuint32AndDestinyVendorComponent'
+)
+DictionaryComponentResponseOfuint32AndDestinyVendorCategoriesComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfuint32AndDestinyVendorCategoriesComponent'
+)
+DictionaryComponentResponseOfuint32AndPersonalDestinyVendorSaleItemSetComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfuint32AndPersonalDestinyVendorSaleItemSetComponent'
+)
+DestinyItemComponentSetOfint32 = ForwardRef('entities.DestinyItemComponentSetOfint32')
+SingleComponentResponseOfDestinyVendorComponent = ForwardRef('entities.SingleComponentResponseOfDestinyVendorComponent')
+SingleComponentResponseOfDestinyVendorCategoriesComponent = ForwardRef(
+    'entities.SingleComponentResponseOfDestinyVendorCategoriesComponent'
+)
+DictionaryComponentResponseOfint32AndDestinyVendorSaleItemComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfint32AndDestinyVendorSaleItemComponent'
+)
+DictionaryComponentResponseOfuint32AndDestinyPublicVendorComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfuint32AndDestinyPublicVendorComponent'
+)
+DictionaryComponentResponseOfuint32AndPublicDestinyVendorSaleItemSetComponent = ForwardRef(
+    'entities.DictionaryComponentResponseOfuint32AndPublicDestinyVendorSaleItemSetComponent'
+)
+DestinyItemComponentSetOfuint32 = ForwardRef('entities.DestinyItemComponentSetOfuint32')
 
 
 class DestinyProfileUserInfoCard(BaseModel):
@@ -169,6 +253,83 @@ class DestinyProfileResponse(BaseModel):
     characterCraftables: Optional[DictionaryComponentResponseOfint64AndDestinyCraftablesComponent]
     itemComponents: Optional[DestinyItemComponentSetOfint64]
     characterCurrencyLookups: Optional[DictionaryComponentResponseOfint64AndDestinyCurrenciesComponent]
+
+
+class DestinyCharacterResponse(BaseModel):
+    inventory: Optional[SingleComponentResponseOfDestinyInventoryComponent]
+    character: Optional[SingleComponentResponseOfDestinyCharacterComponent]
+    progressions: Optional[SingleComponentResponseOfDestinyCharacterProgressionComponent]
+    renderData: Optional[SingleComponentResponseOfDestinyCharacterRenderComponent]
+    activities: Optional[SingleComponentResponseOfDestinyCharacterActivitiesComponent]
+    equipment: Optional[SingleComponentResponseOfDestinyInventoryComponent]
+    kiosks: Optional[SingleComponentResponseOfDestinyKiosksComponent]
+    plugSets: Optional[SingleComponentResponseOfDestinyPlugSetsComponent]
+    presentationNodes: Optional[SingleComponentResponseOfDestinyPresentationNodesComponent]
+    records: Optional[SingleComponentResponseOfDestinyCharacterRecordsComponent]
+    collectibles: Optional[SingleComponentResponseOfDestinyCollectiblesComponent]
+    itemComponents: Optional[DestinyItemComponentSetOfint64]
+    uninstancedItemComponents: Optional[DestinyBaseItemComponentSetOfuint32]
+    currencyLookups: Optional[SingleComponentResponseOfDestinyCurrenciesComponent]
+
+
+class DestinyItemResponse(BaseModel):
+    characterId: Optional[int]
+    item: Optional[SingleComponentResponseOfDestinyItemComponent]
+    instance: Optional[SingleComponentResponseOfDestinyItemInstanceComponent]
+    objectives: Optional[SingleComponentResponseOfDestinyItemObjectivesComponent]
+    perks: Optional[SingleComponentResponseOfDestinyItemPerksComponent]
+    renderData: Optional[SingleComponentResponseOfDestinyItemRenderComponent]
+    stats: Optional[SingleComponentResponseOfDestinyItemStatsComponent]
+    talentGrid: Optional[SingleComponentResponseOfDestinyItemTalentGridComponent]
+    sockets: Optional[SingleComponentResponseOfDestinyItemSocketsComponent]
+    reusablePlugs: Optional[SingleComponentResponseOfDestinyItemReusablePlugsComponent]
+    plugObjectives: Optional[SingleComponentResponseOfDestinyItemPlugObjectivesComponent]
+
+
+class DestinyVendorsResponse(BaseModel):
+    vendorGroups: Optional[SingleComponentResponseOfDestinyVendorGroupComponent]
+    vendors: Optional[DictionaryComponentResponseOfuint32AndDestinyVendorComponent]
+    categories: Optional[DictionaryComponentResponseOfuint32AndDestinyVendorCategoriesComponent]
+    sales: Optional[DictionaryComponentResponseOfuint32AndPersonalDestinyVendorSaleItemSetComponent]
+    itemComponents: Optional[Mapping[int, DestinyItemComponentSetOfint32]]
+    currencyLookups: Optional[SingleComponentResponseOfDestinyCurrenciesComponent]
+    stringVariables: Optional[SingleComponentResponseOfDestinyStringVariablesComponent]
+
+
+class PersonalDestinyVendorSaleItemSetComponent(BaseModel):
+    saleItems: Mapping[int, Entities.Vendors.DestinyVendorSaleItemComponent]
+
+
+class DestinyVendorResponse(BaseModel):
+    vendor: Optional[SingleComponentResponseOfDestinyVendorComponent]
+    categories: Optional[SingleComponentResponseOfDestinyVendorCategoriesComponent]
+    sales: Optional[DictionaryComponentResponseOfint32AndDestinyVendorSaleItemComponent]
+    itemComponents: Optional[DestinyItemComponentSetOfint32]
+    currencyLookups: Optional[SingleComponentResponseOfDestinyCurrenciesComponent]
+    stringVariables: Optional[SingleComponentResponseOfDestinyStringVariablesComponent]
+
+
+class DestinyPublicVendorsResponse(BaseModel):
+    vendorGroups: Optional[SingleComponentResponseOfDestinyVendorGroupComponent]
+    vendors: Optional[DictionaryComponentResponseOfuint32AndDestinyPublicVendorComponent]
+    categories: Optional[DictionaryComponentResponseOfuint32AndDestinyVendorCategoriesComponent]
+    sales: Optional[DictionaryComponentResponseOfuint32AndPublicDestinyVendorSaleItemSetComponent]
+    stringVariables: Optional[SingleComponentResponseOfDestinyStringVariablesComponent]
+
+
+class PublicDestinyVendorSaleItemSetComponent(BaseModel):
+    saleItems: Mapping[int, Components.Vendors.DestinyPublicVendorSaleItemComponent]
+
+
+class DestinyCollectibleNodeDetailResponse(BaseModel):
+    collectibles: Optional[SingleComponentResponseOfDestinyCollectiblesComponent]
+    collectibleItemComponents: DestinyItemComponentSetOfuint32
+
+
+class DestinyItemChangeResponse(BaseModel):
+    item: DestinyItemResponse
+    addedInventoryItems: List[Entities.Items.DestinyItemComponent]
+    removedInventoryItems: List[Entities.Items.DestinyItemComponent]
 
 
 from .... import entities

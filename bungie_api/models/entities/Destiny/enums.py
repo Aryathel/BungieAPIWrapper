@@ -37,6 +37,9 @@ __all__ = [
     'DestinyActivityDifficultyTier',
     'EquipFailureReason',
     'TalentNodeState',
+    'DestinyVendorFilter',
+    'VendorItemStatus',
+    'DestinyVendorItemState',
 ]
 
 
@@ -636,3 +639,62 @@ class TalentNodeState(DocumentedIntEnum):
     Unknown = 11
     CreationOnly = 12
     Hidden = 13
+
+
+class DestinyVendorFilter(DocumentedIntEnum):
+    None_ = 0
+    ApiPurchasable = 1
+
+
+class VendorItemStatus(DocumentedIntFlag):
+    Success = 0
+    NoInventorySpace = 1
+    NoFunds = 2
+    NoProgression = 4
+    NoUnlock = 8
+    NoQuantity = 16
+    OutsidePurchaseWindow = 32
+    NotAvailable = 64
+    UniquenessViolation = 128
+    UnknownError = 256
+    AlreadySelling = 512
+    Unsellable = 1024
+    SellingInhibited = 2048
+    AlreadyOwned = 4096
+    DisplayOnly = 8192
+
+
+class DestinyVendorItemState(DocumentedIntFlag):
+    None_ = 0, 'There are no augments on this item.'
+    Incomplete = 1, (
+        'Deprecated forever (probably). There was a time when Records were going to be implemented through Vendors, '
+        'and this field was relevant. Now they\'re implemented through Presentation Nodes, and this field doesn\'t '
+        'matter anymore.'
+    )
+    RewardAvailable = 2, (
+        'Deprecated forever (probably). See the description of the "Incomplete" value for the juicy scoop.'
+    )
+    Complete = 4, (
+        'Deprecated forever (probably). See the description of the "Incomplete" value for the juicy scoop.'
+    )
+    New = 8, 'This item is considered to be "newly available", and should have some UI showing how shiny it is.'
+    Featured = 16, (
+        'This item is being "featured", and should be shiny in a different way from items that are merely new.'
+    )
+    Ending = 32, 'This item is only available for a limited time, and that time is approaching.'
+    OnSale = 64, 'This item is "on sale". Get it while it\'s hot.'
+    Owned = 128, 'This item is already owned.'
+    WideView = 256, 'This item should be shown with a "wide view" instead of normal icon view.'
+    NexusAttention = 512, (
+        'This indicates that you should show some kind of attention-requesting indicator on the item, in a similar '
+        'manner to items in the nexus that have such notifications.'
+    )
+    SetDiscount = 1024, 'This indicates that the item has some sort of a \'set\' discount.'
+    PriceDrop = 2048, 'This indicates that the item has a price drop.'
+    DailyOffer = 4096, 'This indicates that the item is a daily offer.'
+    Charity = 8192, 'This indicates that the item is for charity.'
+    SeasonalRewardExpiration = 16384, 'This indicates that the item has a seasonal reward expiration.'
+    BestDeal = 32768, 'This indicates that the sale item is the best deal among different choices.'
+    Popular = 65536, 'This indicates that the sale item is popular.'
+    Free = 131072, 'This indicates that the sale item is free.'
+    Locked = 262144, 'This indicates that the sale item is locked.'

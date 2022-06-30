@@ -56,8 +56,7 @@ def oauth_required(
                 return func(self, *args, **kwargs)
 
             raise ClientError(
-                f'The {func.__name__} method must be attached to a client or a subclient whose root client '
-                f'has a "bearer_token" attribute set.'
+                f'The "{func.__name__}" endpoint must be used after an oauth action has been performed.'
             )
 
         return internal

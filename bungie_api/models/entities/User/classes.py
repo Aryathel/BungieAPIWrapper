@@ -1,8 +1,8 @@
 from typing import (
-    List,
     ForwardRef,
+    List,
+    Mapping,
     Optional,
-    Union,
 )
 
 from arya_api_framework import BaseModel
@@ -10,6 +10,7 @@ from arya_api_framework import BaseModel
 from ....utils import ValidatedDatetime
 from ..Ignores import IgnoreResponse
 from ..enums import BungieMembershipType
+from .enums import OptInFlags
 
 
 __all__ = [
@@ -21,6 +22,13 @@ __all__ = [
     'UserSearchResponseDetail',
     'UserSearchResponse',
     'UserMembership',
+    'EMailSettingSubscriptionLocalization',
+    'EmailSubscriptionDefinition',
+    'EmailOptInDefinition',
+    'EMailSettingLocalization',
+    'EmailViewDefinitionSetting',
+    'EmailViewDefinition',
+    'EmailSettings',
 ]
 
 
@@ -30,7 +38,7 @@ GroupUserInfoCard = ForwardRef('GroupsV2.GroupUserInfoCard')
 class UserInfoCard(BaseModel):
     supplementalDisplayName: Optional[str]
     iconPath: Optional[str]
-    crossSaveOverride: int
+    crossSaveOverride: BungieMembershipType
     applicableMembershipTypes: Optional[List[BungieMembershipType]]
     isPublic: bool
     membershipType: BungieMembershipType
@@ -116,6 +124,52 @@ class UserSearchResponse(BaseModel):
     searchResults: List[UserSearchResponseDetail]
     page: int
     hasMore: bool
+
+
+class EMailSettingSubscriptionLocalization(BaseModel):
+    unknownUserDescription: str
+    registeredUserDescription: str
+    unregisteredUserDescription: str
+    knownUserActionText: str
+    title: str
+    description: str
+
+
+class EmailSubscriptionDefinition(BaseModel):
+    name: str
+    localization: Mapping[str, EMailSettingSubscriptionLocalization]
+    value: int
+
+
+class EmailOptInDefinition(BaseModel):
+    name: str
+    value: OptInFlags
+    setByDefault: bool
+    dependentSubscriptions: List[EmailSubscriptionDefinition]
+
+
+class EMailSettingLocalization(BaseModel):
+    title: str
+    description: str
+
+
+class EmailViewDefinitionSetting(BaseModel):
+    name: str
+    localization: Mapping[str, EMailSettingLocalization]
+    setByDefault: bool
+    optInAggregateValue: OptInFlags
+    subscriptions: List[EmailSubscriptionDefinition]
+
+
+class EmailViewDefinition(BaseModel):
+    name: str
+    viewSettings: List[EmailViewDefinitionSetting]
+
+
+class EmailSettings(BaseModel):
+    optInDefinitions: Mapping[str, EmailOptInDefinition]
+    subscriptionDefinitions: Mapping[str, EmailSubscriptionDefinition]
+    views: Mapping[str, EmailViewDefinition]
 
 
 from .. import GroupsV2

@@ -32,7 +32,7 @@ class TagMetadataDefinition(BaseModel):
     description: str
     order: int
     items: List[TagMetadataItem]
-    datatype: str
+    datatype: ContentPropertyDataTypeEnum
     name: str
     isRequired: bool
 

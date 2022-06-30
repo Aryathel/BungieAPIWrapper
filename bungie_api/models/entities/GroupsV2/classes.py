@@ -9,13 +9,26 @@ from typing import (
 from arya_api_framework import BaseModel
 
 from ....utils import ValidatedDatetime
-from .. import Destiny, Queries, Exceptions
+from .. import (
+    Destiny,
+    Queries,
+)
 from ..enums import BungieMembershipType
 from .enums import (
     GroupType,
     HostGuidedGamesPermissionLevel,
     ChatSecuritySetting,
     GroupApplicationResolveState,
+    MembershipOption,
+    Capabilities,
+    GroupDateRange,
+    GroupSortBy,
+    GroupMemberCountFilter,
+    AllianceStatus,
+    GroupHomepage,
+    GroupPostPublicity,
+    RuntimeGroupMemberType,
+    GroupPotentialMemberStatus,
 )
 
 
@@ -32,47 +45,56 @@ __all__ = [
     'GroupV2ClanInfo',
     'GroupSearchResponse',
     'GroupOptionalConversation',
-    'SearchResultOfGroupMember',
     'GroupMemberLeaveResult',
     'GroupBan',
-    'SearchResultOfGroupBan',
     'GroupMemberApplication',
-    'SearchResultOfGroupMemberApplication',
     'GroupMembership',
     'GetGroupsForMemberResponse',
     'GroupMembershipSearchResponse',
     'GroupApplicationResponse',
+    'GroupQuery',
+    'GroupNameSearchRequest',
+    'GroupEditAction',
+    'GroupOptionsEditAction',
+    'GroupOptionalConversationAddRequest',
+    'GroupOptionalConversationEditRequest',
+    'GroupBanRequest',
+    'GroupApplicationRequest',
+    'GroupApplicationListRequest',
+    'GroupPotentialMembership',
+    'GroupPotentialMembershipSearchResponse',
 ]
 
 
 UserInfoCard = ForwardRef('User.UserInfoCard')
+UserMembership = ForwardRef('User.UserMembership')
 
 
 class GroupUserInfoCard(BaseModel):
     LastSeenDisplayName: str
     LastSeenDisplayNameType: BungieMembershipType
     supplementalDisplayName: Optional[str]
-    iconPath: str
-    crossSaveOverride: int
+    iconPath: Optional[str]
+    crossSaveOverride: BungieMembershipType
     applicableMembershipTypes: List[BungieMembershipType]
     isPublic: bool
     membershipType: BungieMembershipType
     membershipId: int
     displayName: str
-    bungieGlobalDisplayName: str
+    bungieGlobalDisplayName: Optional[str]
     bungieGlobalDisplayNameCode: Optional[str]
 
 
 class GroupFeatures(BaseModel):
     maximumMembers: int
     maximumMembershipsOfGroupType: int
-    capabilities: int
+    capabilities: Capabilities
     membershipTypes: List[BungieMembershipType]
     invitePermissionOverride: bool
     updateCulturePermissionOverride: bool
     hostGuidedGamePermissionOverride: HostGuidedGamesPermissionLevel
     updateBannerPermissionOverride: bool
-    joinLevel: int
+    joinLevel: RuntimeGroupMemberType
 
 
 class ClanBanner(BaseModel):
@@ -106,12 +128,12 @@ class GroupV2(BaseModel):
     motto: str
     allowChat: bool
     isDefaultPostPublic: bool
-    chatSecurity: int
+    chatSecurity: ChatSecuritySetting
     locale: str
     avatarImageIndex: int
-    homepage: int
-    membershipOption: int
-    defaultPublicity: int
+    homepage: GroupHomepage
+    membershipOption: MembershipOption
+    defaultPublicity: GroupPostPublicity
     theme: str
     bannerPath: str
     avatarPath: str
@@ -123,7 +145,7 @@ class GroupV2(BaseModel):
 
 
 class GroupMember(BaseModel):
-    memberType: int
+    memberType: RuntimeGroupMemberType
     isOnline: bool
     lastOnlineStatusChange: int
     groupId: int
@@ -133,7 +155,7 @@ class GroupMember(BaseModel):
 
 
 class GroupPotentialMember(BaseModel):
-    potentialStatus: int
+    potentialStatus: GroupPotentialMemberStatus
     groupId: int
     destinyUserInfo: GroupUserInfoCard
     bungieNetUserInfo: UserInfoCard
@@ -145,7 +167,7 @@ class GroupResponse(BaseModel):
     founder: GroupMember
     alliedIds: List[int]
     parentGroup: Optional[GroupV2]
-    allianceStatus: int
+    allianceStatus: AllianceStatus
     groupJoinInviteCount: int
     currentUserMembershipsInactiveForDestiny: bool
     currentUserMemberMap: Mapping[str, GroupMember]
@@ -166,8 +188,8 @@ class GroupV2Card(BaseModel):
     motto: str
     memberCount: int
     locale: str
-    membershipOption: int
-    capabilities: int
+    membershipOption: MembershipOption
+    capabilities: Capabilities
     clanInfo: GroupV2ClanInfo
     avatarPath: str
     theme: str
@@ -190,15 +212,6 @@ class GroupOptionalConversation(BaseModel):
     chatSecurity: ChatSecuritySetting
 
 
-class SearchResultOfGroupMember(BaseModel):
-    results: List[GroupMember]
-    totalResults: int
-    hasMore: bool
-    query: Queries.PagedQuery
-    replacementContinuationToken: Optional[str]
-    useTotalResults: bool
-
-
 class GroupMemberLeaveResult(BaseModel):
     group: GroupV2
     groupDeleted: bool
@@ -209,19 +222,10 @@ class GroupBan(BaseModel):
     lastModifiedBy: UserInfoCard
     createdBy: UserInfoCard
     dateBanned: ValidatedDatetime
-    dateExpires: ValidatedDatetime
-    comment: str
+    dateExpires: Optional[ValidatedDatetime]
+    comment: Optional[str]
     bungieNetUserInfo: Optional[UserInfoCard]
-    destinyUserInfo: GroupUserInfoCard
-
-
-class SearchResultOfGroupBan(BaseModel):
-    results: List[GroupBan]
-    totalResults: int
-    hasMore: bool
-    query: Queries.PagedQuery
-    replacementContinuationToken: Optional[str]
-    useTotalResults: bool
+    destinyUserInfo: Optional[GroupUserInfoCard]
 
 
 class GroupMemberApplication(BaseModel):
@@ -234,15 +238,6 @@ class GroupMemberApplication(BaseModel):
     resolveMessage: Optional[str]
     destinyUserInfo: GroupUserInfoCard
     bungieNetUserInfo: Optional[UserInfoCard]
-
-
-class SearchResultOfGroupMemberApplication(BaseModel):
-    results: List[GroupMemberApplication]
-    totalResults: int
-    hasMore: bool
-    query: Queries.PagedQuery
-    replacementContinuationToken: Optional[str]
-    useTotalResults: bool
 
 
 class GroupMembership(BaseModel):
@@ -270,7 +265,117 @@ class GroupMembershipSearchResponse(BaseModel):
 
 
 class GroupApplicationResponse(BaseModel):
-    resolution: Exceptions.PlatformErrorCodes
+    resolution: GroupApplicationResolveState
+
+
+class GroupQuery(BaseModel):
+    name: Optional[str]
+    groupType: Optional[GroupType]
+    creationDate: Optional[GroupDateRange]
+    sortBy: Optional[GroupSortBy]
+    groupMemberCountFilter: Optional[GroupMemberCountFilter]
+    localeFilter: Optional[str]
+    tagText: Optional[str]
+    itemsPerPage: Optional[int]
+    currentPage: Optional[int]
+    requestContinuationToken: Optional[str]
+
+
+class GroupNameSearchRequest(BaseModel):
+    groupName: str
+    groupType: GroupType
+
+
+class GroupEditAction(BaseModel):
+    name: Optional[str]
+    about: Optional[str]
+    motto: Optional[str]
+    theme: Optional[str]
+    avatarImageIndex: Optional[int]
+    tags: Optional[str]
+    isPublic: Optional[bool]
+    membershipOption: Optional[MembershipOption]
+    isPublicTopicAdminOnly: Optional[bool]
+    allowChat: Optional[bool]
+    chatSecurity: Optional[ChatSecuritySetting]
+    callsign: Optional[str]
+    locale: Optional[str]
+    homepage: Optional[GroupHomepage]
+    enableInvitationMessagingForAdmins: Optional[bool]
+    defaultPublicity: Optional[GroupPostPublicity]
+
+
+class GroupOptionsEditAction(BaseModel):
+    """
+    Attributes
+    ----------
+        InvitePermissionOverride: Optional[:py:class:`bool`]
+            Defines the minimum member level allowed to invite new members to the group.
+            If this is set to ``True``, ``Admins`` have the power to invite new members, if ``False``, they do not.
+            ``Founders`` and ``Acting Founders`` always have the ability to invite new members.
+            Defaults to ``False`` for clans, and ``True`` for groups.
+        UpdateCulturePermissionOverride: Optional[:py:class:`bool`]
+            Defines the minimum member level allowed to update group culture (clan name, motto, banner, etc.).
+            If this is set to ``True``, ``Admins`` have the power to update group culture, if ``False``, they do not.
+            ``Founders`` and ``Acting Founders`` always have the ability to invite new members.
+            Defaults to ``False`` for clans, and ``True`` for groups.
+        HostGuidedGamePermissionOverride: Optional[:class:`HostGuidedGamesPermissionLevel`]
+            The minimum member level allowed to host guided games. ``Founders``, ``Acting Founders``, and ``Admins``
+            can always host guided games. The default is to ``Member`` for clans, and ``None`` for groups, although
+            groups do not use this.
+        UpdateBannerPermissionOverride: Optional[:py:class:`bool`]
+            The minimum member level allowed to update the clan banner. If this is set to ``True``, ``Admins`` can
+            edit the clan banner, if ``False``, they cannot. ``Founders`` and ``Acting Founders`` can always edit the
+            clan banner.
+        JoinLevel: Optional[:class:`RuntimeGroupMemberType`]
+            The level that a member will join at when they accept an invite, application, or joining an open clan.
+            Defaults to ``Beginner``.
+    """
+
+    InvitePermissionOverride: Optional[bool]
+    UpdateCulturePermissionOverride: Optional[bool]
+    HostGuidedGamePermissionOverride: Optional[HostGuidedGamesPermissionLevel]
+    UpdateBannerPermissionOverride: Optional[bool]
+    JoinLevel: Optional[RuntimeGroupMemberType]
+
+
+class GroupOptionalConversationAddRequest(BaseModel):
+    chatName: str
+    chatSecurity: ChatSecuritySetting
+
+
+class GroupOptionalConversationEditRequest(BaseModel):
+    chatEnabled: Optional[bool]
+    chatName: Optional[str]
+    chatSecurity: Optional[ChatSecuritySetting]
+
+
+class GroupBanRequest(BaseModel):
+    comment: Optional[str]
+    length: Optional[int]
+
+
+class GroupApplicationRequest(BaseModel):
+    message: Optional[str]
+
+
+class GroupApplicationListRequest(BaseModel):
+    memberships: List[UserMembership]
+    message: Optional[str]
+
+
+class GroupPotentialMembership(BaseModel):
+    member: GroupPotentialMember
+    group: GroupV2
+
+
+class GroupPotentialMembershipSearchResponse(BaseModel):
+    results: List[GroupPotentialMembership]
+    totalResults: int
+    hasMore: bool
+    query: Queries.PagedQuery
+    replacementContinuationToken: Optional[str]
+    useTotalResults: bool
 
 
 from .. import User

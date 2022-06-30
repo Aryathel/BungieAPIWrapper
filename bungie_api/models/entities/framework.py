@@ -59,8 +59,9 @@ class DocumentedIntEnum(IntEnum):
 
     @classmethod
     def default_validator(cls, o: IntEnumT):
-        if hasattr(cls, str(o)):
-            return getattr(cls, str(o))
+        for k, v in cls.__members__.items():
+            if k.lower() == str(o).lower():
+                return v
         try:
             o = int(o)
         except ValueError:
@@ -73,11 +74,11 @@ class DocumentedIntEnum(IntEnum):
 
     @classmethod
     def str_validator(cls, o: IntEnumT) -> str:
-        return str(cls.default_validator(o))
+        return cls.default_validator(o).name.strip('_')
 
     @classmethod
     def list_validator(cls, o: Union[IntEnumT, List[IntEnumT]]) -> List['DocumentedIntEnum']:
-        if not isinstance(o, Iterable):
+        if not isinstance(o, Iterable) or isinstance(o, str):
             o = [o]
 
         vals = []
@@ -91,7 +92,7 @@ class DocumentedIntEnum(IntEnum):
 
     @classmethod
     def str_list_validator(cls, o: Union[IntEnumT, List[IntEnumT]]) -> List[str]:
-        return [str(v.name) for v in cls.list_validator(o)]
+        return [v.name.strip('_') for v in cls.list_validator(o)]
 
     @classmethod
     def int_list_str_validator(cls, o: Union[IntEnumT, List[IntEnumT]]) -> str:
@@ -124,9 +125,20 @@ class DocumentedIntFlag(IntFlag):
 
         if v_type == EnumValidatorType.Default:
             return cls.default_validator(o)
+        if v_type == EnumValidatorType.Int:
+            return cls.int_validator(o)
 
     @classmethod
     def default_validator(cls, o: IntEnumT):
-        if hasattr(cls, str(o)):
-            return getattr(cls, str(o))
-        return cls(int(o))
+        for k, v in cls.__members__.items():
+            if k.lower() == str(o).lower():
+                return v
+        try:
+            o = int(o)
+        except ValueError:
+            pass
+        return cls(o)
+
+    @classmethod
+    def int_validator(cls, o: IntEnumT) -> int:
+        return int(cls.default_validator(o))

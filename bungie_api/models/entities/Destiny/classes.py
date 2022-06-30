@@ -6,6 +6,7 @@ from typing import (
 
 from arya_api_framework import BaseModel
 
+from .. import Exceptions
 from . import (
     Challenges,
     Definitions,
@@ -13,6 +14,7 @@ from . import (
 from .enums import (
     DestinyActivityDifficultyTier,
     TalentNodeState,
+    DestinyProgressionRewardItemState,
 )
 
 
@@ -25,6 +27,9 @@ __all__ = [
     'DestinyStat',
     'DestinyTalentNodeStatBlock',
     'DestinyTalentNode',
+    'DestinyUnlockStatus',
+    'DestinyEquipItemResult',
+    'DestinyEquipItemResults',
 ]
 
 
@@ -47,7 +52,7 @@ class DestinyProgression(BaseModel):
     nextLevelAt: int
     currentResetCount: Optional[int]
     seasonResets: Optional[DestinyProgressionResetEntry]
-    rewardItemStates: Optional[List[int]]
+    rewardItemStates: Optional[List[DestinyProgressionRewardItemState]]
 
 
 class DestinyItemQuantity(BaseModel):
@@ -99,3 +104,17 @@ class DestinyTalentNode(BaseModel):
     progressPercent: int
     hidden: bool
     nodeStatsBlock: Optional[DestinyTalentNodeStatBlock]
+
+
+class DestinyUnlockStatus(BaseModel):
+    unlockHash: int
+    isSet: bool
+
+
+class DestinyEquipItemResult(BaseModel):
+    itemInstanceId: int
+    equipStatus: Exceptions.PlatformErrorCodes
+
+
+class DestinyEquipItemResults(BaseModel):
+    equipResults: List[DestinyEquipItemResult]

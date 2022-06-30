@@ -10,6 +10,7 @@ from . import (
     Profiles,
     Records,
     StringVariables,
+    Vendors,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     'Profiles',
     'Records',
     'StringVariables',
+    'Vendors',
 ]

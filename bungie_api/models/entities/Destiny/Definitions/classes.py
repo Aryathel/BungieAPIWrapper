@@ -30,6 +30,7 @@ from . import (
 
 DestinyItemQuantity = ForwardRef('Destiny.DestinyItemQuantity')
 DyeReference = ForwardRef('Destiny.DyeReference')
+SearchResultOfDestinyEntitySearchResultItem = ForwardRef('entities.SearchResultOfDestinyEntitySearchResultItem')
 
 
 __all__ = [
@@ -70,6 +71,8 @@ __all__ = [
     'DestinyInventoryItemDefinition',
     'DestinyDefinition',
     'DestinyMaterialRequirement',
+    'DestinyEntitySearchResult',
+    'DestinyEntitySearchResultItem',
 ]
 
 
@@ -410,4 +413,17 @@ class DestinyMaterialRequirement(BaseModel):
     omitFromRequirements: bool
 
 
+class DestinyEntitySearchResultItem(BaseModel):
+    hash: int
+    entityType: str
+    displayProperties: Common.DestinyDisplayPropertiesDefinition
+    weight: float
+
+
+class DestinyEntitySearchResult(BaseModel):
+    suggestedWords: List[str]
+    results: SearchResultOfDestinyEntitySearchResultItem
+
+
+from .... import entities
 from ... import Destiny

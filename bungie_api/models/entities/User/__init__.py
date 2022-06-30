@@ -1,3 +1,7 @@
+from .enums import (
+    OptInFlags,
+)
+
 from .classes import (
     UserInfoCard,
     GeneralUser,
@@ -6,12 +10,21 @@ from .classes import (
     HardLinkedUserMembership,
     UserSearchResponseDetail,
     UserSearchResponse,
-    UserMembership
+    UserMembership,
+    EMailSettingSubscriptionLocalization,
+    EmailSubscriptionDefinition,
+    EmailOptInDefinition,
+    EMailSettingLocalization,
+    EmailViewDefinitionSetting,
+    EmailViewDefinition,
+    EmailSettings,
 )
 
 from . import Models
 
 __all__ = [
+    'OptInFlags',
+
     'UserInfoCard',
     'GeneralUser',
     'UserToUserContext',
@@ -20,6 +33,13 @@ __all__ = [
     'UserSearchResponseDetail',
     'UserSearchResponse',
     'UserMembership',
+    'EMailSettingSubscriptionLocalization',
+    'EmailSubscriptionDefinition',
+    'EmailOptInDefinition',
+    'EMailSettingLocalization',
+    'EmailViewDefinitionSetting',
+    'EmailViewDefinition',
+    'EmailSettings',
 
     'Models'
 ]

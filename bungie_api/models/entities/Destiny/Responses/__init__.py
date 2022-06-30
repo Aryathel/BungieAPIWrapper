@@ -3,6 +3,15 @@ from .classes import (
     DestinyErrorProfiles,
     DestinyProfileUserInfoCard,
     DestinyProfileResponse,
+    DestinyCharacterResponse,
+    DestinyItemResponse,
+    DestinyVendorsResponse,
+    PersonalDestinyVendorSaleItemSetComponent,
+    DestinyVendorResponse,
+    DestinyPublicVendorsResponse,
+    PublicDestinyVendorSaleItemSetComponent,
+    DestinyCollectibleNodeDetailResponse,
+    DestinyItemChangeResponse,
 )
 
 
@@ -11,4 +20,13 @@ __all__ = [
     'DestinyProfileUserInfoCard',
     'DestinyLinkedProfileResponse',
     'DestinyProfileResponse',
+    'DestinyCharacterResponse',
+    'DestinyItemResponse',
+    'DestinyVendorsResponse',
+    'PersonalDestinyVendorSaleItemSetComponent',
+    'DestinyVendorResponse',
+    'DestinyPublicVendorsResponse',
+    'PublicDestinyVendorSaleItemSetComponent',
+    'DestinyCollectibleNodeDetailResponse',
+    'DestinyItemChangeResponse',
 ]

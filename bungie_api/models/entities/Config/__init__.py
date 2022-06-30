@@ -3,8 +3,12 @@ from .classes import (
     GroupTheme,
 )
 
+from . import ClanBanner
+
 
 __all__ = [
     'UserTheme',
     'GroupTheme',
+
+    'ClanBanner',
 ]

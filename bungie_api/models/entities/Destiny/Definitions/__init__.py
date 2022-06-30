@@ -36,6 +36,8 @@ from .classes import (
     DestinyInventoryItemDefinition,
     DestinyDefinition,
     DestinyMaterialRequirement,
+    DestinyEntitySearchResult,
+    DestinyEntitySearchResultItem,
 )
 
 from . import (
@@ -87,6 +89,8 @@ __all__ = [
     'DestinyInventoryItemDefinition',
     'DestinyDefinition',
     'DestinyMaterialRequirement',
+    'DestinyEntitySearchResult',
+    'DestinyEntitySearchResultItem',
 
     'Animations',
     'Collectibles',

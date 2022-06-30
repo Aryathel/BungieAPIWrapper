@@ -11,8 +11,12 @@ from ..errors import ObsoleteError
 from ..models.entities.Applications import ApplicationScopes
 from ..models.entities import BungieMembershipType
 from ..models.entities.User.Models import BungieCredentialType
-from ..models import responses
-from ..models import queries
+from ..models import responses, queries
+
+
+__all__ = [
+    'User'
+]
 
 
 @destinyclient
@@ -118,10 +122,10 @@ class User(SubClient, name='user', relative_path='/User'):
             membership_id: int,
             membership_type: Union[int, BungieMembershipType]
     ) -> responses.User.GetMembershipDataById:
-        if isinstance(membership_type, int):
-            membership_type = BungieMembershipType(membership_type)
+        membership_type = BungieMembershipType.int_validator(membership_type)
+
         return self.get(
-            f'/GetMembershipsById/{membership_id}/{membership_type.value}/',
+            f'/GetMembershipsById/{membership_id}/{membership_type}/',
             response_format=responses.User.GetMembershipDataById
         )
 
@@ -157,15 +161,10 @@ class User(SubClient, name='user', relative_path='/User'):
             credential: Any,
             credential_type: Union[str, int, BungieCredentialType] = BungieCredentialType.SteamId
     ) -> responses.User.GetMembershipFromHardLinkedCredential:
-        if isinstance(credential_type, int):
-            credential_type = BungieCredentialType(credential_type)
-        elif isinstance(credential_type, str):
-            credential_type = getattr(BungieCredentialType, credential_type, None)
-            if not credential_type:
-                raise ValueError('The "credential_type" is not a recognized BungieCredentialType.')
+        credential_type = BungieCredentialType.str_validator(credential_type)
 
         return self.get(
-            f'/GetMembershipFromHardLinkedCredential/{credential_type.name}/{credential}/',
+            f'/GetMembershipFromHardLinkedCredential/{credential_type}/{credential}/',
             response_format=responses.User.GetMembershipFromHardLinkedCredential
         )
 
@@ -188,12 +187,12 @@ class User(SubClient, name='user', relative_path='/User'):
     )
     def search_by_global_name_post(
             self,
-            display_name_prefix: str,
+            display_name: str,
             page: int = 0
     ) -> responses.User.SearchByGlobalNamePost:
         return self.post(
             f'/Search/GlobalName/{page}',
-            body=queries.User.UserSearchPrefixRequest(displayNamePrefix=display_name_prefix),
+            body=queries.User.UserSearchPrefixRequest(displayNamePrefix=display_name),
             response_format=responses.User.SearchByGlobalNamePost
         )
 

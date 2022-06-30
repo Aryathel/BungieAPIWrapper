@@ -12,6 +12,11 @@ from ..models import responses, queries
 from ..decorators import oauth_required, destinyclient
 
 
+__all__ = [
+    'App'
+]
+
+
 @destinyclient
 @apiclient
 class App(SubClient, name='app', relative_path='/App'):

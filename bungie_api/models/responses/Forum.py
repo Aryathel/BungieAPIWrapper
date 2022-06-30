@@ -29,7 +29,7 @@ class GetTopicsPaged(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -54,7 +54,7 @@ class GetCoreTopicsPaged(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -79,7 +79,7 @@ class GetPostsThreadedPaged(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -104,7 +104,7 @@ class GetPostsThreadedPagedFromChild(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -129,7 +129,7 @@ class GetPostAndParent(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -154,7 +154,7 @@ class GetPostAndParentAwaitingApproval(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:
@@ -187,7 +187,7 @@ class GetPoll(PaginatedBaseResponse):
     @property
     def next(self) -> Optional[int]:
         if self.is_paginating:
-            return self.Response.query.currentPage
+            return self.Response.query.currentPage + 1
 
     @property
     def previous(self) -> None:

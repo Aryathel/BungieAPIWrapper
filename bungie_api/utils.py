@@ -17,7 +17,8 @@ __all__ = [
 
 DATETIME_FMTS = [
     '%Y-%m-%dT%H:%M:%S.%f%z',
-    '%Y-%m-%dT%H:%M:%S%z'
+    '%Y-%m-%dT%H:%M:%S%z',
+    '%Y-%m-%d'
 ]
 
 

@@ -13,6 +13,11 @@ from ..models import (
 )
 
 
+__all__ = [
+    'Content'
+]
+
+
 @apiclient
 class Content(SubClient, name='content', relative_path='/Content'):
     @endpoint(
@@ -20,8 +25,8 @@ class Content(SubClient, name='content', relative_path='/Content'):
         name='Content.GetContentType',
         description='Gets an object describing a particular variant of content.',
         href=(
-                'https://bungie-net.github.io/multi/operation_get_Content-GetContentType.html'
-                '#operation_get_Content-GetContentType',
+            'https://bungie-net.github.io/multi/operation_get_Content-GetContentType.html'
+            '#operation_get_Content-GetContentType'
         ),
         method='GET'
     )
@@ -37,7 +42,7 @@ class Content(SubClient, name='content', relative_path='/Content'):
         description='Returns a content item referenced by id.',
         href=(
                 'https://bungie-net.github.io/multi/operation_get_Content-GetContentById.html'
-                '#operation_get_Content-GetContentById',
+                '#operation_get_Content-GetContentById'
         ),
         method='GET'
     )
@@ -154,9 +159,9 @@ class Content(SubClient, name='content', relative_path='/Content'):
         ),
         method='GET'
     )
-    def search_help_articles(self, searchtext: str, size: str) -> responses.BaseResponse:
+    def search_help_articles(self, searchtext: str, size: int) -> responses.BaseResponse:
         return self.get(
-            f'/SearchHelpArticles/{searchtext}/{size}',
+            f'/SearchHelpArticles/{searchtext}/{size}/',
             response_format=responses.BaseResponse
         )
 

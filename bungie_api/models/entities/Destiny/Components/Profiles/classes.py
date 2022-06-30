@@ -8,6 +8,7 @@ from arya_api_framework import BaseModel
 
 from ......utils import ValidatedDatetime
 from ... import (
+    Artifacts,
     DestinyPartyMemberStates,
     DestinyGamePrivacySetting,
     DestinyJoinClosedReasons,
@@ -25,7 +26,8 @@ __all__ = [
 
 
 class DestinyProfileProgressionComponent(BaseModel):
-    checklist: Mapping[int, Mapping[int, bool]]
+    checklists: Mapping[int, Mapping[int, bool]]
+    seasonalArtifact: Artifacts.DestinyArtifactProfileScoped
 
 
 class DestinyProfileTransitoryPartyMember(BaseModel):
